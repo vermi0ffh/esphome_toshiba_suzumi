@@ -38,6 +38,8 @@ class ToshibaClimateUart : public PollingComponent, public climate::Climate, pub
   void update() override;
   void scan();
   float get_setup_priority() const override { return setup_priority::LATE; }
+  void sendCmdRaw(uint8_t cmd, uint8_t value);
+  void sendCmd(ToshibaCommandType cmd, uint8_t value);
 
   void set_outdoor_temp_sensor(sensor::Sensor *outdoor_temp_sensor) { outdoor_temp_sensor_ = outdoor_temp_sensor; }
   void set_pwr_select(select::Select *pws_select) { pwr_select_ = pws_select; }
@@ -68,7 +70,6 @@ class ToshibaClimateUart : public PollingComponent, public climate::Climate, pub
   void parseResponse(std::vector<uint8_t> rawData);
   void requestData(ToshibaCommandType cmd);
   void process_command_queue_();
-  void sendCmd(ToshibaCommandType cmd, uint8_t value);
   void getInitData();
   void handle_rx_byte_(uint8_t c);
   bool validate_message_();
