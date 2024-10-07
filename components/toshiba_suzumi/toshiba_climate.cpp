@@ -118,15 +118,6 @@ void ToshibaClimateUart::sendCmd(ToshibaCommandType cmd, uint8_t value) {
   this->enqueue_command_(ToshibaCommand{.cmd = cmd, .payload = std::vector<uint8_t>{payload}});
 }
 
-void ToshibaClimateUart::sendCmdRaw(uint8_t cmd, uint8_t value) {
-  std::vector<uint8_t> payload = {2, 0, 3, 16, 0, 0, 7, 1, 48, 1, 0, 2};
-  payload.push_back(cmd);
-  payload.push_back(value);
-  payload.push_back(checksum(payload, payload.size()));
-  ESP_LOGD(TAG, "Sending ToshibaCommand: %d, value: %d, checksum: %d", cmd, value, payload[14]);
-  this->enqueue_command_(ToshibaCommand{.cmd = cmd, .payload = std::vector<uint8_t>{payload}});
-}
-
 void ToshibaClimateUart::requestData(ToshibaCommandType cmd) {
   std::vector<uint8_t> payload = {2, 0, 3, 16, 0, 0, 6, 1, 48, 1, 0, 1};
   payload.push_back(static_cast<uint8_t>(cmd));
